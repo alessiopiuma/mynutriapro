@@ -981,39 +981,73 @@ const WMO_DESC = {
 };
 
 async function caricaMeteo() {
+  const CACHE_KEY = 'mynutria_meteo_cache';
+  const CACHE_TTL = 30 * 60 * 1000; // 30 minuti in ms
+
+  function mostraMeteo(icon, temp, city, desc) {
+    document.querySelector('#meteo-widget .meteo-icon').textContent = icon;
+    document.getElementById('meteo-temp').textContent = temp + '°';
+    document.getElementById('meteo-location').textContent = city;
+    document.getElementById('meteo-desc').textContent = desc;
+  }
+
+  async function fetchMeteo(lat, lon) {
+    // Meteo
+    const meteoRes = await fetch(
+      `https://api.open-meteo.com/v1/forecast?latitude=${lat.toFixed(4)}&longitude=${lon.toFixed(4)}&current=temperature_2m,weathercode&timezone=auto`
+    );
+    const meteoData = await meteoRes.json();
+    const temp = Math.round(meteoData.current?.temperature_2m ?? 0);
+    const code = meteoData.current?.weathercode ?? 0;
+    const icon = WMO_ICONS[code] || '🌤';
+    const desc = WMO_DESC[code] || '';
+
+    // Geocoding inverso
+    const geoRes = await fetch(
+      `https://nominatim.openstreetmap.org/reverse?lat=${lat.toFixed(4)}&lon=${lon.toFixed(4)}&format=json&zoom=12`
+    );
+    const geoData = await geoRes.json();
+    const city = geoData.address?.city || geoData.address?.town || geoData.address?.village || geoData.address?.county || 'Posizione attuale';
+
+    const cached = { icon, temp, city, desc, lat, lon, ts: Date.now() };
+    localStorage.setItem(CACHE_KEY, JSON.stringify(cached));
+    return cached;
+  }
+
+  // Controlla cache esistente
+  try {
+    const raw = localStorage.getItem(CACHE_KEY);
+    if (raw) {
+      const cache = JSON.parse(raw);
+      // Mostra subito i dati cached (anche se scaduti) per UX veloce
+      mostraMeteo(cache.icon, cache.temp, cache.city, cache.desc);
+
+      // Se cache è fresca (< 30 min), non richiedere la posizione
+      if (Date.now() - cache.ts < CACHE_TTL) return;
+
+      // Cache scaduta: aggiorna in background con ultima posizione nota
+      try {
+        const fresh = await fetchMeteo(cache.lat, cache.lon);
+        mostraMeteo(fresh.icon, fresh.temp, fresh.city, fresh.desc);
+      } catch(e) { /* mantieni dati cached */ }
+      return;
+    }
+  } catch(e) { /* ignora errori cache */ }
+
+  // Nessuna cache: chiedi la posizione (prima volta)
   if (!navigator.geolocation) return;
   navigator.geolocation.getCurrentPosition(async pos => {
     const { latitude: lat, longitude: lon } = pos.coords;
     try {
-      // Meteo
-      const meteoRes = await fetch(
-        `https://api.open-meteo.com/v1/forecast?latitude=${lat.toFixed(4)}&longitude=${lon.toFixed(4)}&current=temperature_2m,weathercode&timezone=auto`
-      );
-      const meteoData = await meteoRes.json();
-      const temp = Math.round(meteoData.current?.temperature_2m ?? '—');
-      const code = meteoData.current?.weathercode ?? 0;
-      const icon = WMO_ICONS[code] || '🌤';
-      const desc = WMO_DESC[code] || '';
-
-      // Geocoding inverso
-      const geoRes = await fetch(
-        `https://nominatim.openstreetmap.org/reverse?lat=${lat.toFixed(4)}&lon=${lon.toFixed(4)}&format=json&zoom=12`
-      );
-      const geoData = await geoRes.json();
-      const city = geoData.address?.city || geoData.address?.town || geoData.address?.village || geoData.address?.county || 'Posizione attuale';
-
-      document.getElementById('meteo-icon-el') && (document.getElementById('meteo-icon-el').textContent = icon);
-      document.querySelector('#meteo-widget .meteo-icon').textContent = icon;
-      document.getElementById('meteo-temp').textContent = temp + '°';
-      document.getElementById('meteo-location').textContent = city;
-      document.getElementById('meteo-desc').textContent = desc;
+      const data = await fetchMeteo(lat, lon);
+      mostraMeteo(data.icon, data.temp, data.city, data.desc);
     } catch(e) {
       document.getElementById('meteo-location').textContent = 'Meteo non disponibile';
     }
   }, () => {
     document.getElementById('meteo-location').textContent = 'Posizione negata';
     document.getElementById('meteo-temp').textContent = '—';
-  }, { timeout: 8000 });
+  }, { timeout: 8000, enableHighAccuracy: false });
 }
 
 const oggi = new Date();
