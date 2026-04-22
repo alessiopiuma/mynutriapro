@@ -1226,16 +1226,20 @@ function iconaAlimento(nome) {
 }
 
 function mostraSuggerimenti(pasto, lista) {
+  const PAROLE_LIQUIDO = ['latte','milk','acqua','water','succo','juice','bibita','bevanda','drink','tè','tea','caffè','caffe','coffee','cappuccino','espresso','americano','cola','cocacola','aranciata','limonata','birra','beer','vino','wine','brodo','smoothie','shake','frullato','kefir','siero','panna','crema di latte'];
   const sugg = document.getElementById('sugg-' + pasto);
   sugg.innerHTML = lista.map(r => {
     const nomeSafe = r.nome.replace(/'/g,"\\'").replace(/"/g,'&quot;');
     const cat = r.cat ? `<span style="font-size:10px;color:var(--ink-muted);margin-left:4px;">${r.cat}</span>` : '';
-    const pzInfo = r.per_pezzo ? `<span style="font-size:10px;color:#2596be;margin-left:4px;">· ${r.per_pezzo}g/${r.unita_pezzo}</span>` : '';
+    const nomeL = r.nome.toLowerCase();
+    const isLiq = r.liquido === true || PAROLE_LIQUIDO.some(p => nomeL.includes(p));
+    const pzInfo = r.per_pezzo && !isLiq ? `<span style="font-size:10px;color:#2596be;margin-left:4px;">· ${r.per_pezzo}g/${r.unita_pezzo}</span>` : '';
+    const mlBadge = isLiq ? `<span style="font-size:10px;color:#2596be;margin-left:4px;background:rgba(37,150,190,0.1);padding:1px 5px;border-radius:4px;">ml</span>` : '';
     const pp = r.per_pezzo || 0;
     const up = (r.unita_pezzo || '').replace(/'/g,"\\'");
     return `<div class="food-suggestion-item" onclick="selezionaAlimento('${pasto}','${nomeSafe}',${r.kcal_100},${pp},'${up}')">
-      <div class="fs-name">${iconaAlimento(r.nome)}${r.nome}${cat}${pzInfo}</div>
-      <div class="fs-kcal">${r.kcal_100} kcal / 100g</div>
+      <div class="fs-name">${iconaAlimento(r.nome)}${r.nome}${cat}${pzInfo}${mlBadge}</div>
+      <div class="fs-kcal">${r.kcal_100} kcal / 100${isLiq ? 'ml' : 'g'}</div>
     </div>`;
   }).join('');
   sugg.style.display = 'block';
@@ -1243,12 +1247,12 @@ function mostraSuggerimenti(pasto, lista) {
 
 const DB_ALIMENTI = [
   // ── LATTICINI ──────────────────────────────────────────
-  {cat:'Latticini',nome:'Latte intero',kcal_100:64},
-  {cat:'Latticini',nome:'Latte parzialmente scremato',kcal_100:46},
-  {cat:'Latticini',nome:'Latte scremato',kcal_100:35},
-  {cat:'Latticini',nome:'Latte di soia',kcal_100:40},
-  {cat:'Latticini',nome:'Latte di avena',kcal_100:47},
-  {cat:'Latticini',nome:'Latte di mandorla',kcal_100:24},
+  {cat:'Latticini',liquido:true,nome:'Latte intero',kcal_100:64},
+  {cat:'Latticini',liquido:true,nome:'Latte parzialmente scremato',kcal_100:46},
+  {cat:'Latticini',liquido:true,nome:'Latte scremato',kcal_100:35},
+  {cat:'Latticini',liquido:true,nome:'Latte di soia',kcal_100:40},
+  {cat:'Latticini',liquido:true,nome:'Latte di avena',kcal_100:47},
+  {cat:'Latticini',liquido:true,nome:'Latte di mandorla',kcal_100:24},
   {cat:'Latticini',nome:'Yogurt intero bianco',kcal_100:61},
   {cat:'Latticini',nome:'Yogurt greco 0%',kcal_100:57},
   {cat:'Latticini',nome:'Yogurt greco 2%',kcal_100:73},
@@ -1269,7 +1273,7 @@ const DB_ALIMENTI = [
   {cat:'Latticini',nome:'Fontina',kcal_100:343},
   {cat:'Latticini',nome:'Provolone',kcal_100:352},
   {cat:'Latticini',nome:'Burro',kcal_100:717},
-  {cat:'Latticini',nome:'Panna fresca',kcal_100:292},
+  {cat:'Latticini',liquido:true,nome:'Panna fresca',kcal_100:292},
 
   // ── UOVA ──────────────────────────────────────────────
   {cat:'Uova',nome:'Uovo intero (medio)',kcal_100:143,per_pezzo:60,unita_pezzo:'uovo'},
@@ -1559,8 +1563,17 @@ function selezionaAlimento(pasto, nome, kcal100, per_pezzo, unita_pezzo) {
   const mlBtn = document.getElementById('ubtn-ml-' + pasto);
   const qtyInp = document.getElementById('qty-' + pasto);
 
-  // Rileva se è un liquido
-  const isLiquido = DB_ALIMENTI.find(a => a.nome === nome)?.liquido === true;
+  // Rileva se è un liquido — controlla DB locale E parole chiave (per risultati Open Food Facts)
+  const PAROLE_LIQUIDO = [
+    'latte','milk','acqua','water','succo','juice','bibita','bevanda','drink',
+    'tè','tea','caffè','caffe','coffee','cappuccino','espresso','americano',
+    'cola','cocacola','aranciata','limonata','birra','beer','vino','wine',
+    'brodo','smoothie','shake','frullato','yogurt drink','kefir','siero',
+    'panna','crema di latte','beverage'
+  ];
+  const nomeL = nome.toLowerCase();
+  const isLiquido = DB_ALIMENTI.find(a => a.nome === nome)?.liquido === true
+    || PAROLE_LIQUIDO.some(p => nomeL.includes(p));
 
   // Reset tutti i bottoni
   if (pzBtn) { pzBtn.style.display = 'none'; pzBtn.classList.remove('active'); }
