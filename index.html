@@ -278,6 +278,28 @@
   .ob-mini .om-val { font-family: 'DM Serif Display',serif; font-size: 1.3rem; font-weight: 400; color: var(--ink); line-height: 1; }
   .ob-mini .om-lab { font-size: 10px; color: var(--ink-muted); margin-top: 3px; text-transform: uppercase; letter-spacing: 0.06em; }
 
+  /* ===== STORICO ===== */
+  .st-giorno { border:0.5px solid var(--border); border-radius:10px; margin-bottom:8px; overflow:hidden; }
+  .st-header { display:flex; align-items:center; justify-content:space-between; padding:10px 14px; background:var(--cream); cursor:pointer; user-select:none; transition:background 0.15s; }
+  .st-header:hover { background:var(--sage-pale); }
+  .st-header.open { background:var(--sage-pale); }
+  .st-data-label { font-size:13px; font-weight:500; color:var(--ink); }
+  .st-data-sub { font-size:11px; color:var(--ink-muted); margin-top:2px; }
+  .st-kcal { font-family:'DM Serif Display',serif; font-size:1.15rem; color:var(--accent); white-space:nowrap; }
+  .st-kcal small { font-family:'DM Sans',sans-serif; font-size:10px; color:var(--ink-muted); margin-left:2px; }
+  .st-chevron { font-size:11px; color:var(--ink-muted); transition:transform 0.2s; margin-left:8px; }
+  .st-header.open .st-chevron { transform:rotate(180deg); }
+  .st-body { display:none; padding:10px 14px 14px; background:var(--paper); border-top:0.5px solid var(--border-soft); }
+  .st-body.open { display:block; }
+  .st-pasto-titolo { font-size:10px; font-weight:500; color:var(--ink-muted); text-transform:uppercase; letter-spacing:0.07em; display:flex; justify-content:space-between; padding:6px 0 3px; border-bottom:0.5px solid var(--border-soft); margin-bottom:2px; }
+  .st-alimento { display:flex; justify-content:space-between; font-size:12px; color:var(--ink-soft); padding:2px 0; }
+  .st-alimento .sa-q { color:var(--ink-muted); font-size:11px; }
+  .st-alimento .sa-k { color:var(--ink-muted); font-size:11px; white-space:nowrap; }
+  .st-footer { display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; padding-top:8px; border-top:0.5px solid var(--border-soft); }
+  .st-badge { background:var(--cream); border:0.5px solid var(--border); border-radius:6px; padding:4px 10px; font-size:11px; color:var(--ink-soft); display:flex; align-items:center; gap:4px; }
+  .st-badge strong { color:var(--ink); }
+  .st-empty { color:var(--ink-muted); font-size:12px; font-style:italic; padding:4px 0; }
+
   /* ===== IMPOSTAZIONI ===== */
   .settings-list { display: flex; flex-direction: column; gap: 0; }
   .settings-row { display: flex; align-items: center; justify-content: space-between; padding: 12px 0; border-bottom: 0.5px solid var(--border-soft); }
@@ -584,6 +606,7 @@
     <button class="tab-btn" onclick="switchTab('azioni', this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:5px;vertical-align:-2px"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Azioni rapide</button>
     <button class="tab-btn" onclick="switchTab('personalizza', this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:5px;vertical-align:-2px"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>Personalizza</button>
     <button class="tab-btn" onclick="switchTab('impostazioni', this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:5px;vertical-align:-2px"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>Impostazioni</button>
+    <button class="tab-btn" onclick="switchTab('storico', this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:5px;vertical-align:-2px"><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="10"/></svg>Storico</button>
   </div>
   </div>
 
@@ -936,6 +959,25 @@
     </div>
   </div>
 
+  <!-- TAB STORICO -->
+  <div id="tab-storico" class="tab-panel">
+    <div class="full-card">
+      <div class="card-title" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+        <span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:5px;vertical-align:-1px"><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="10"/></svg>Storico giornate</span>
+        <select id="storico-filtro" onchange="caricaStoricoPasti()" style="font-size:11px;padding:3px 8px;border:0.5px solid var(--border);border-radius:6px;background:var(--cream);color:var(--ink);font-family:'DM Sans',sans-serif;cursor:pointer;outline:none;">
+          <option value="30">Ultimi 30 giorni</option>
+          <option value="60">Ultimi 60 giorni</option>
+          <option value="90">Ultimi 90 giorni</option>
+          <option value="365">Ultimo anno</option>
+          <option value="all">Tutto lo storico</option>
+        </select>
+      </div>
+      <div id="storico-pasti-wrap" style="margin-top:4px;">
+        <div style="color:var(--ink-muted);font-size:13px;text-align:center;padding:2rem 0;">Seleziona la tab per caricare lo storico.</div>
+      </div>
+    </div>
+  </div>
+
   <footer>
     <span>© 2026 · by Alessio Piuma</span>
   </footer>
@@ -1054,28 +1096,57 @@ const oggi = new Date();
 const todayKey = oggi.toISOString().slice(0, 10);
 
 // --- Supabase helper ---
-async function sb(method, table, body, params) {
-  setSyncStatus('syncing', 'salvataggio…');
+async function sb(method, table, body, params, _retry = 0) {
+  const isWrite = method === 'POST' || method === 'PATCH' || method === 'DELETE';
+  if (isWrite) setSyncStatus('syncing', 'salvataggio…');
   try {
     let url = SUPABASE_URL + '/rest/v1/' + table;
     if (params) url += '?' + params;
     const headers = {
       'apikey': SUPABASE_KEY,
       'Authorization': 'Bearer ' + SUPABASE_KEY,
-      'Content-Type': 'application/json',
     };
+    if (body) headers['Content-Type'] = 'application/json';
     if (method === 'POST') headers['Prefer'] = 'return=representation';
     if (method === 'GET') headers['Prefer'] = 'return=representation';
-    const res = await fetch(url, { method, headers, body: body ? JSON.stringify(body) : undefined });
-    if (!res.ok) throw new Error(await res.text());
-    setSyncStatus('ok', 'sincronizzato');
+
+    const res = await fetch(url, {
+      method,
+      headers,
+      body: body ? JSON.stringify(body) : undefined
+    });
+
+    // Gestione errori HTTP
+    if (!res.ok) {
+      const errText = await res.text();
+      let errDetail = errText;
+      try { const j = JSON.parse(errText); errDetail = j.message || j.hint || errText; } catch {}
+      console.error(`[Supabase] ${method} ${table} → HTTP ${res.status}: ${errDetail}`);
+
+      // Retry automatico su 503/504 (server temporaneamente non disponibile)
+      if ((res.status === 503 || res.status === 504) && _retry < 2) {
+        await new Promise(r => setTimeout(r, 800 * (_retry + 1)));
+        return sb(method, table, body, params, _retry + 1);
+      }
+      if (isWrite) setSyncStatus('error', `errore ${res.status}`);
+      return null;
+    }
+
+    if (isWrite) setSyncStatus('ok', 'sincronizzato');
     if (method === 'DELETE') return true;
     const text = await res.text();
-    if (!text) return true;
-    return JSON.parse(text);
+    if (!text) return method === 'GET' ? [] : true;
+    try { return JSON.parse(text); }
+    catch { return method === 'GET' ? [] : true; }
+
   } catch(e) {
-    setSyncStatus('error', 'errore sync');
-    console.error('Supabase error:', e);
+    // Errore di rete (offline, timeout…)
+    console.error(`[Supabase] ${method} ${table} → rete: ${e.message}`);
+    if (_retry < 2) {
+      await new Promise(r => setTimeout(r, 1000 * (_retry + 1)));
+      return sb(method, table, body, params, _retry + 1);
+    }
+    if (isWrite) setSyncStatus('error', 'offline');
     return null;
   }
 }
@@ -1101,6 +1172,7 @@ function switchTab(name, btn) {
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
   document.getElementById('tab-' + name).classList.add('active');
   btn.classList.add('active');
+  if (name === 'storico') caricaStoricoPasti();
 }
 
 const opzioni = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
@@ -2181,22 +2253,21 @@ async function aggiungiAlimento(pasto) {
     displayLabel = qtyVal + 'g';
   }
 
-  // POST senza label_qty (non esiste nella tabella Supabase)
+  // POST solo i campi certi della tabella Supabase
   const record = await sb('POST', 'alimenti', {
     data: todayKey,
     pasto,
     nome: food.nome,
     quantita: qtaGrammi,
-    unita: food.unita === 'ml' ? 'ml' : 'g',
     kcal_100: food.kcal_100,
     kcal_totali: kcalTotali
   });
 
   const item = Array.isArray(record) ? record[0] : record;
-  // Usa item dal server se disponibile, altrimenti fallback locale con displayLabel
+  const unitaLocale = food.unita === 'ml' ? 'ml' : 'g';
   const entry = item && item.id
-    ? { ...item, display_label: displayLabel }
-    : { id: Date.now().toString(), nome: food.nome, quantita: qtaGrammi, unita: food.unita === 'ml' ? 'ml' : 'g', kcal_100: food.kcal_100, kcal_totali: kcalTotali, display_label: displayLabel };
+    ? { ...item, display_label: displayLabel, unita: unitaLocale }
+    : { id: Date.now().toString(), nome: food.nome, quantita: qtaGrammi, unita: unitaLocale, kcal_100: food.kcal_100, kcal_totali: kcalTotali, display_label: displayLabel };
 
   if (!alimentiPerPasto[pasto]) alimentiPerPasto[pasto] = [];
   alimentiPerPasto[pasto].push(entry);
@@ -2726,6 +2797,109 @@ function applicaImpostazioni() {
   if (localStorage.getItem('mynutria_set_suoni') === '1') {
     const btn = document.getElementById('toggle-suoni'); if(btn){btn.classList.add('on');btn.setAttribute('aria-checked','true');}
   }
+}
+
+// ===================== STORICO COMPLETO =====================
+async function caricaStoricoPasti() {
+  const wrap = document.getElementById('storico-pasti-wrap');
+  if (!wrap) return;
+  wrap.innerHTML = '<div style="color:var(--ink-muted);font-size:13px;text-align:center;padding:2rem 0;">Caricamento…</div>';
+
+  const filtro = document.getElementById('storico-filtro')?.value || '30';
+  let paramData = 'order=data.desc';
+  if (filtro !== 'all') {
+    const d = new Date(); d.setDate(d.getDate() - parseInt(filtro));
+    const dataFrom = d.toISOString().slice(0, 10);
+    paramData = `data=gte.${dataFrom}&order=data.desc`;
+  }
+
+  // Carica tutto in parallelo
+  const [datiPasti, datiAlimenti, datiPeso, datiAcqua] = await Promise.all([
+    sb('GET', 'pasti',       null, paramData),
+    sb('GET', 'alimenti',    null, paramData),
+    sb('GET', 'peso',        null, paramData),
+    sb('GET', 'idratazione', null, paramData),
+  ]);
+
+  // Costruisci set di tutti i giorni con dati
+  const giorniSet = new Set();
+  [datiPasti, datiAlimenti, datiPeso, datiAcqua].forEach(arr => {
+    (arr || []).forEach(r => giorniSet.add(r.data));
+  });
+  const giorni = [...giorniSet].sort((a, b) => b.localeCompare(a));
+
+  if (!giorni.length) {
+    wrap.innerHTML = '<div style="color:var(--ink-muted);font-size:13px;text-align:center;padding:2rem 0;">Nessun dato nel periodo selezionato.</div>';
+    return;
+  }
+
+  const ORDINE = ['Colazione','Spuntino mattina','Pranzo','Spuntino pomeriggio','Cena','Spuntino serale'];
+  const MOM_ICON = { mattina:'🌅', pranzo:'☀️', sera:'🌙', altro:'⚖️' };
+
+  wrap.innerHTML = giorni.map(data => {
+    const d = new Date(data + 'T12:00:00');
+    const isOggi = data === todayKey;
+    const dataLabel = isOggi ? 'Oggi' : d.toLocaleDateString('it-IT', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
+
+    const alimGiorno   = (datiAlimenti  || []).filter(a => a.data === data);
+    const pastiGiorno  = (datiPasti     || []).filter(p => p.data === data);
+    const pesoGiorno   = (datiPeso      || []).filter(p => p.data === data);
+    const acquaGiorno  = (datiAcqua     || []).find(a => a.data === data);
+    const totKcal      = Math.round(alimGiorno.reduce((s, a) => s + (a.kcal_totali || 0), 0));
+    const completati   = pastiGiorno.filter(p => p.completato).length;
+
+    // Pasti
+    let pastiHtml = '';
+    ORDINE.forEach(pasto => {
+      const alim = alimGiorno.filter(a => a.pasto === pasto);
+      if (!alim.length) return;
+      const kcalP = Math.round(alim.reduce((s, a) => s + (a.kcal_totali || 0), 0));
+      pastiHtml += `<div class="st-pasto-titolo"><span>${pasto}</span><span>${kcalP} kcal</span></div>
+        ${alim.map(a => {
+          const u = a.unita || 'g';
+          const qty = a.display_label || a.label_qty ||
+            (u === 'ml' ? (a.quantita >= 1000 ? (a.quantita/1000).toFixed(1).replace('.0','')+'L' : a.quantita+'ml') : a.quantita+'g');
+          return `<div class="st-alimento">
+            <span>${a.nome} <span class="sa-q">${qty}</span></span>
+            <span class="sa-k">${Math.round(a.kcal_totali)} kcal</span>
+          </div>`;
+        }).join('')}`;
+    });
+    if (!pastiHtml) pastiHtml = '<div class="st-empty">Nessun alimento registrato</div>';
+
+    // Footer badges
+    let badges = `<div class="st-badge">🍽️ <strong>${completati}/6</strong> pasti</div>`;
+    if (acquaGiorno) badges += `<div class="st-badge">💧 <strong>${acquaGiorno.bicchieri}/8</strong> bicchieri</div>`;
+    pesoGiorno.forEach(p => {
+      badges += `<div class="st-badge">${MOM_ICON[p.momento]||'⚖️'} <strong>${parseFloat(p.valore).toFixed(1)} kg</strong> <span style="color:var(--ink-muted)">${p.momento}</span></div>`;
+    });
+
+    const uid = 'st' + data.replace(/-/g,'');
+    return `<div class="st-giorno">
+      <div class="st-header" id="h${uid}" onclick="toggleSt('${uid}')">
+        <div>
+          <div class="st-data-label">${dataLabel}</div>
+          <div class="st-data-sub">${completati}/6 pasti · ${totKcal > 0 ? totKcal.toLocaleString('it-IT')+' kcal' : 'nessuna kcal'}</div>
+        </div>
+        <div style="display:flex;align-items:center;">
+          <div class="st-kcal">${totKcal > 0 ? totKcal.toLocaleString('it-IT') : '—'}<small>kcal</small></div>
+          <div class="st-chevron">▼</div>
+        </div>
+      </div>
+      <div class="st-body" id="b${uid}">
+        ${pastiHtml}
+        <div class="st-footer">${badges}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function toggleSt(uid) {
+  const body   = document.getElementById('b' + uid);
+  const header = document.getElementById('h' + uid);
+  if (!body) return;
+  const open = body.classList.toggle('open');
+  header?.classList.toggle('open', open);
 }
 
 init();
