@@ -165,19 +165,49 @@
   .food-unit-btn { background: none; border: none; padding: 0 10px; font-family: 'DM Sans',sans-serif; font-size: 12px; color: var(--ink-muted); cursor: pointer; transition: background 0.12s, color 0.12s; white-space: nowrap; }
   .food-unit-btn.active { background: #2596be; color: #fff; }
   .food-unit-hint { font-size: 10px; color: var(--ink-muted); margin-top: 3px; }
-  .food-search-inp { flex: 1; background: #fff; border: 0.5px solid var(--border); border-radius: 6px; padding: 6px 10px; font-family: 'DM Sans',sans-serif; font-size: 13px; color: var(--ink); outline: none; height: 32px; }
-  .food-search-inp:focus { border-color: #2596be; }
+  .food-search-inp { flex: 1; background: var(--cream); border: 0.5px solid var(--border); border-radius: 8px; padding: 8px 12px; font-family: 'DM Sans',sans-serif; font-size: 13px; color: var(--ink); outline: none; height: 36px; min-width: 0; }
+  .food-search-inp:focus { border-color: var(--accent); box-shadow: 0 0 0 2px rgba(37,150,190,0.12); }
   .food-qty-inp { width: 70px; background: #fff; border: 0.5px solid var(--border); border-radius: 6px; padding: 6px 8px; font-family: 'DM Sans',sans-serif; font-size: 13px; color: var(--ink); outline: none; height: 32px; }
   .food-add-btn { background: #2596be; color: #fff; border: none; border-radius: 6px; padding: 0 12px; height: 32px; font-family: 'DM Sans',sans-serif; font-size: 12px; font-weight: 500; cursor: pointer; white-space: nowrap; transition: opacity 0.15s; }
   .food-add-btn:hover { opacity: 0.85; }
   .food-add-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
-  .food-suggestions { position: absolute; top: 34px; left: 0; right: 80px; background: #fff; border: 0.5px solid var(--border); border-radius: 6px; z-index: 50; max-height: 180px; overflow-y: auto; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
-  .food-suggestion-item { padding: 8px 12px; font-size: 12px; cursor: pointer; border-bottom: 0.5px solid var(--border-soft); }
+  .food-suggestions {
+    position: fixed;
+    background: var(--paper);
+    border: 0.5px solid var(--border);
+    border-radius: 12px;
+    z-index: 1000;
+    max-height: 60vh;
+    overflow-y: auto;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.18);
+  }
+  .food-suggestion-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 9px 14px; cursor: pointer;
+    border-bottom: 0.5px solid var(--border-soft);
+    transition: background 0.1s;
+  }
   .food-suggestion-item:last-child { border-bottom: none; }
-  .food-suggestion-item:hover { background: var(--sage-pale); }
-  .food-suggestion-item .fs-name { font-weight: 500; color: var(--ink); }
-  .food-suggestion-item .fs-kcal { color: var(--ink-muted); margin-top: 1px; }
+  .food-suggestion-item:hover, .food-suggestion-item:active { background: var(--sage-pale); }
+  .fs-icon { font-size: 17px; flex-shrink: 0; width: 24px; text-align: center; }
+  .fs-main { flex: 1; min-width: 0; display: flex; align-items: center; gap: 6px; overflow: hidden; }
+  .fs-name { font-size: 13px; font-weight: 500; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex-shrink: 1; }
+  .fs-cat { font-size: 10px; color: var(--ink-muted); white-space: nowrap; flex-shrink: 0; }
+  .fs-badge { font-size: 10px; color: var(--accent); background: rgba(37,150,190,0.1); border-radius: 3px; padding: 1px 5px; white-space: nowrap; flex-shrink: 0; }
+  .fs-kcal { font-size: 12px; font-weight: 500; color: var(--ink-muted); white-space: nowrap; flex-shrink: 0; margin-left: auto; }
+  .fs-no-results { padding: 16px; font-size: 13px; color: var(--ink-muted); text-align: center; }
+
+  /* Condimento pasta */
+  .condimento-wrap { margin-top: 8px; padding: 10px 12px; background: var(--sage-pale); border: 0.5px solid var(--sage-light); border-radius: 8px; position: relative; }
+  .condimento-label { font-size: 11px; font-weight: 500; color: var(--accent); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 6px; display: flex; align-items: center; justify-content: space-between; }
+  .condimento-search-row { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+  .condimento-inp { flex: 1; background: var(--paper); border: 0.5px solid var(--border); border-radius: 7px; padding: 7px 10px; font-family: 'DM Sans',sans-serif; font-size: 13px; color: var(--ink); outline: none; height: 34px; min-width: 100px; }
+  .condimento-inp:focus { border-color: var(--accent); }
+  .condimento-qty { width: 68px; height: 34px; background: var(--paper); border: 0.5px solid var(--border); border-radius: 7px; padding: 0 8px; font-family: 'DM Sans',sans-serif; font-size: 13px; color: var(--ink); outline: none; }
+  .condimento-skip { font-size: 11px; color: var(--ink-muted); text-decoration: underline; cursor: pointer; background: none; border: none; padding: 0; }
+  .condimento-skip:hover { color: var(--ink); }
+  .condimento-sugg { position: absolute; left: 12px; right: 12px; background: var(--paper); border: 0.5px solid var(--border); border-radius: 8px; z-index: 201; max-height: 220px; overflow-y: auto; box-shadow: 0 6px 18px rgba(0,0,0,0.12); display: none; }
 
   .food-list { display: flex; flex-direction: column; gap: 4px; }
   .food-item { display: flex; align-items: center; gap: 8px; font-size: 12px; padding: 4px 2px; }
@@ -448,10 +478,10 @@
     .food-unit-toggle { height: 38px; }
     .food-unit-btn { padding: 0 9px; font-size: 12px; }
     .food-add-btn { height: 38px; font-size: 12px; padding: 0 12px; flex: 1; }
-    .food-suggestions { right: 0; left: 0; font-size: 12px; max-height: 200px; }
-    .food-suggestion-item { padding: 8px 10px; }
-    .food-suggestion-item .fs-name { font-size: 12px; }
-    .food-suggestion-item .fs-kcal { font-size: 11px; }
+    .food-suggestions { width: calc(100vw - 24px); max-height: 55vh; border-radius: 10px; }
+    .food-suggestion-item { padding: 9px 12px; }
+    .fs-name { font-size: 13px; }
+    .fs-kcal { font-size: 11.5px; }
     .food-item { font-size: 11.5px; padding: 5px 2px; }
     .food-item-del { padding: 4px 8px; font-size: 12px; }
     .food-total { font-size: 11.5px; padding-top: 7px; margin-top: 7px; }
@@ -637,6 +667,18 @@
               <div class="food-suggestions" id="sugg-Colazione" style="display:none;"></div>
             </div>
             <div class="food-list" id="foods-Colazione"></div>
+            <div class="condimento-wrap" id="condwrap-Colazione" style="display:none;">
+              <div class="condimento-label">
+                <span>🍝 Aggiungi condimento</span>
+                <button class="condimento-skip" onclick="saltaCondimento('Colazione')">salta</button>
+              </div>
+              <div class="condimento-search-row">
+                <input class="condimento-inp" id="cond-search-Colazione" placeholder="Cerca condimento…" oninput="cercaCondimento('Colazione')" autocomplete="off">
+                <input class="condimento-qty" id="cond-qty-Colazione" type="number" value="30" min="1" placeholder="g">
+                <span class="condimento-unit">g</span>
+              </div>
+              <div class="condimento-sugg" id="cond-sugg-Colazione"></div>
+            </div>
             <div class="food-total"><span class="food-total-label">Totale pasto</span><span class="food-total-val" id="total-Colazione">0 kcal</span></div>
           </div>
         </div>
@@ -656,6 +698,18 @@
               <div class="food-suggestions" id="sugg-Spuntino mattina" style="display:none;"></div>
             </div>
             <div class="food-list" id="foods-Spuntino mattina"></div>
+            <div class="condimento-wrap" id="condwrap-Spuntino mattina" style="display:none;">
+              <div class="condimento-label">
+                <span>🍝 Aggiungi condimento</span>
+                <button class="condimento-skip" onclick="saltaCondimento('Spuntino mattina')">salta</button>
+              </div>
+              <div class="condimento-search-row">
+                <input class="condimento-inp" id="cond-search-Spuntino mattina" placeholder="Cerca condimento…" oninput="cercaCondimento('Spuntino mattina')" autocomplete="off">
+                <input class="condimento-qty" id="cond-qty-Spuntino mattina" type="number" value="30" min="1" placeholder="g">
+                <span class="condimento-unit">g</span>
+              </div>
+              <div class="condimento-sugg" id="cond-sugg-Spuntino mattina"></div>
+            </div>
             <div class="food-total"><span class="food-total-label">Totale pasto</span><span class="food-total-val" id="total-Spuntino mattina">0 kcal</span></div>
           </div>
         </div>
@@ -675,6 +729,18 @@
               <div class="food-suggestions" id="sugg-Pranzo" style="display:none;"></div>
             </div>
             <div class="food-list" id="foods-Pranzo"></div>
+            <div class="condimento-wrap" id="condwrap-Pranzo" style="display:none;">
+              <div class="condimento-label">
+                <span>🍝 Aggiungi condimento</span>
+                <button class="condimento-skip" onclick="saltaCondimento('Pranzo')">salta</button>
+              </div>
+              <div class="condimento-search-row">
+                <input class="condimento-inp" id="cond-search-Pranzo" placeholder="Cerca condimento…" oninput="cercaCondimento('Pranzo')" autocomplete="off">
+                <input class="condimento-qty" id="cond-qty-Pranzo" type="number" value="30" min="1" placeholder="g">
+                <span class="condimento-unit">g</span>
+              </div>
+              <div class="condimento-sugg" id="cond-sugg-Pranzo"></div>
+            </div>
             <div class="food-total"><span class="food-total-label">Totale pasto</span><span class="food-total-val" id="total-Pranzo">0 kcal</span></div>
           </div>
         </div>
@@ -694,6 +760,18 @@
               <div class="food-suggestions" id="sugg-Spuntino pomeriggio" style="display:none;"></div>
             </div>
             <div class="food-list" id="foods-Spuntino pomeriggio"></div>
+            <div class="condimento-wrap" id="condwrap-Spuntino pomeriggio" style="display:none;">
+              <div class="condimento-label">
+                <span>🍝 Aggiungi condimento</span>
+                <button class="condimento-skip" onclick="saltaCondimento('Spuntino pomeriggio')">salta</button>
+              </div>
+              <div class="condimento-search-row">
+                <input class="condimento-inp" id="cond-search-Spuntino pomeriggio" placeholder="Cerca condimento…" oninput="cercaCondimento('Spuntino pomeriggio')" autocomplete="off">
+                <input class="condimento-qty" id="cond-qty-Spuntino pomeriggio" type="number" value="30" min="1" placeholder="g">
+                <span class="condimento-unit">g</span>
+              </div>
+              <div class="condimento-sugg" id="cond-sugg-Spuntino pomeriggio"></div>
+            </div>
             <div class="food-total"><span class="food-total-label">Totale pasto</span><span class="food-total-val" id="total-Spuntino pomeriggio">0 kcal</span></div>
           </div>
         </div>
@@ -713,6 +791,18 @@
               <div class="food-suggestions" id="sugg-Cena" style="display:none;"></div>
             </div>
             <div class="food-list" id="foods-Cena"></div>
+            <div class="condimento-wrap" id="condwrap-Cena" style="display:none;">
+              <div class="condimento-label">
+                <span>🍝 Aggiungi condimento</span>
+                <button class="condimento-skip" onclick="saltaCondimento('Cena')">salta</button>
+              </div>
+              <div class="condimento-search-row">
+                <input class="condimento-inp" id="cond-search-Cena" placeholder="Cerca condimento…" oninput="cercaCondimento('Cena')" autocomplete="off">
+                <input class="condimento-qty" id="cond-qty-Cena" type="number" value="30" min="1" placeholder="g">
+                <span class="condimento-unit">g</span>
+              </div>
+              <div class="condimento-sugg" id="cond-sugg-Cena"></div>
+            </div>
             <div class="food-total"><span class="food-total-label">Totale pasto</span><span class="food-total-val" id="total-Cena">0 kcal</span></div>
           </div>
         </div>
@@ -732,6 +822,18 @@
               <div class="food-suggestions" id="sugg-Spuntino serale" style="display:none;"></div>
             </div>
             <div class="food-list" id="foods-Spuntino serale"></div>
+            <div class="condimento-wrap" id="condwrap-Spuntino serale" style="display:none;">
+              <div class="condimento-label">
+                <span>🍝 Aggiungi condimento</span>
+                <button class="condimento-skip" onclick="saltaCondimento('Spuntino serale')">salta</button>
+              </div>
+              <div class="condimento-search-row">
+                <input class="condimento-inp" id="cond-search-Spuntino serale" placeholder="Cerca condimento…" oninput="cercaCondimento('Spuntino serale')" autocomplete="off">
+                <input class="condimento-qty" id="cond-qty-Spuntino serale" type="number" value="30" min="1" placeholder="g">
+                <span class="condimento-unit">g</span>
+              </div>
+              <div class="condimento-sugg" id="cond-sugg-Spuntino serale"></div>
+            </div>
             <div class="food-total"><span class="food-total-label">Totale pasto</span><span class="food-total-val" id="total-Spuntino serale">0 kcal</span></div>
           </div>
         </div>
@@ -1241,6 +1343,26 @@ function aggiornaStats() {
   document.getElementById('fat-pct').textContent  = fatPct  + '%';
 }
 
+function posizionaSuggerimenti(pasto) {
+  const inp = document.getElementById('search-' + pasto);
+  const sugg = document.getElementById('sugg-' + pasto);
+  if (!inp || !sugg) return;
+  const rect = inp.getBoundingClientRect();
+  const isMobile = window.innerWidth <= 640;
+  if (isMobile) {
+    const w = window.innerWidth - 24;
+    sugg.style.left = '12px';
+    sugg.style.top = (rect.bottom + 6) + 'px';
+    sugg.style.width = w + 'px';
+    sugg.style.right = '';
+  } else {
+    sugg.style.left = rect.left + 'px';
+    sugg.style.top = (rect.bottom + 6) + 'px';
+    sugg.style.width = Math.max(rect.width, 460) + 'px';
+    sugg.style.right = '';
+  }
+}
+
 function cercaAlimento(pasto) {
   const query = document.getElementById('search-' + pasto).value.trim();
   const sugg = document.getElementById('sugg-' + pasto);
@@ -1299,24 +1421,70 @@ function iconaAlimento(nome) {
 }
 
 function mostraSuggerimenti(pasto, lista) {
-  const PAROLE_LIQUIDO = ['latte','milk','acqua','water','succo','juice','bibita','bevanda','drink','tè','tea','caffè','caffe','coffee','cappuccino','espresso','americano','cola','cocacola','aranciata','limonata','birra','beer','vino','wine','brodo','smoothie','shake','frullato','kefir','siero','panna','crema di latte'];
+  const PAROLE_LIQUIDO = ['latte','milk','acqua','water','succo','juice','bibita','bevanda','drink','te','tea','caffe','coffee','cappuccino','espresso','cola','aranciata','limonata','birra','beer','vino','wine','brodo','smoothie','shake','frullato','kefir','panna'];
   const sugg = document.getElementById('sugg-' + pasto);
+  if (!lista.length) {
+    sugg.innerHTML = '<div class="fs-no-results">Nessun alimento trovato. Prova con l\'API.</div>';
+    sugg.style.display = 'block';
+    return;
+  }
   sugg.innerHTML = lista.map(r => {
     const nomeSafe = r.nome.replace(/'/g,"\\'").replace(/"/g,'&quot;');
-    const cat = r.cat ? `<span style="font-size:10px;color:var(--ink-muted);margin-left:4px;">${r.cat}</span>` : '';
     const nomeL = r.nome.toLowerCase();
     const isLiq = r.liquido === true || PAROLE_LIQUIDO.some(p => nomeL.includes(p));
-    const pzInfo = r.per_pezzo && !isLiq ? `<span style="font-size:10px;color:#2596be;margin-left:4px;">· ${r.per_pezzo}g/${r.unita_pezzo}</span>` : '';
-    const mlBadge = isLiq ? `<span style="font-size:10px;color:#2596be;margin-left:4px;background:rgba(37,150,190,0.1);padding:1px 5px;border-radius:4px;">ml</span>` : '';
     const pp = r.per_pezzo || 0;
     const up = (r.unita_pezzo || '').replace(/'/g,"\\'");
+    const emoji = iconaEmoji(r.nome, r.cat);
+    const kcalUnit = isLiq ? 'ml' : 'g';
+    let badge = '';
+    if (pp && !isLiq) badge = `<span class="fs-badge">${up}</span>`;
+    if (isLiq) badge = `<span class="fs-badge">ml</span>`;
+    const catChip = r.cat ? `<span class="fs-cat">· ${r.cat}</span>` : '';
     return `<div class="food-suggestion-item" onclick="selezionaAlimento('${pasto}','${nomeSafe}',${r.kcal_100},${pp},'${up}')">
-      <div class="fs-name">${iconaAlimento(r.nome)}${r.nome}${cat}${pzInfo}${mlBadge}</div>
-      <div class="fs-kcal">${r.kcal_100} kcal / 100${isLiq ? 'ml' : 'g'}</div>
+      <span class="fs-icon">${emoji}</span>
+      <div class="fs-main"><span class="fs-name">${r.nome}</span>${catChip}${badge}</div>
+      <span class="fs-kcal">${r.kcal_100} kcal/100${kcalUnit}</span>
     </div>`;
   }).join('');
   sugg.style.display = 'block';
+  posizionaSuggerimenti(pasto);
 }
+
+function iconaEmoji(nome, cat) {
+  const n = nome.toLowerCase();
+  const c = (cat || '').toLowerCase();
+  if (c === 'frutta') return '🍎';
+  if (c === 'verdure') return '🥦';
+  if (c === 'latticini') return '🧀';
+  if (c === 'uova') return '🥚';
+  if (c === 'carne') return '🥩';
+  if (c === 'pesce') return '🐟';
+  if (c === 'cereali' || c === 'pasta italiana') return '🌾';
+  if (c === 'legumi') return '🫘';
+  if (c === 'frutta secca') return '🥜';
+  if (c === 'bevande') return '🥤';
+  if (c === 'dolci' || c.includes('biscotti')) return '🍪';
+  if (c === 'condimenti' || c === 'condimento pasta') return '🫙';
+  if (c === 'giapponese') return '🍣';
+  if (c === 'piatti italiani') return '🍝';
+  if (c.includes('poke') || c.includes('pokè')) return '🥗';
+  if (c === 'cucina internazionale') return '🌍';
+  if (n.includes('pasta') || n.includes('spaghetti') || n.includes('penne') || n.includes('rigatoni') || n.includes('tagliatelle')) return '🍝';
+  if (n.includes('pizza')) return '🍕';
+  if (n.includes('riso') || n.includes('risotto')) return '🍚';
+  if (n.includes('pane') || n.includes('focaccia')) return '🍞';
+  if (n.includes('latte') || n.includes('yogurt')) return '🥛';
+  if (n.includes('caffe') || n.includes('cappuccino')) return '☕';
+  if (n.includes('acqua')) return '💧';
+  if (n.includes('birra')) return '🍺';
+  if (n.includes('vino')) return '🍷';
+  if (n.includes('pollo')) return '🍗';
+  if (n.includes('uovo') || n.includes('uova')) return '🥚';
+  if (n.includes('burro') || n.includes('olio') || n.includes('pesto')) return '🫙';
+  if (n.includes('pomodoro')) return '🍅';
+  return '🍽️';
+}
+
 
 const DB_ALIMENTI = [
   // ── LATTICINI ──────────────────────────────────────────
@@ -1567,6 +1735,80 @@ const DB_ALIMENTI = [
   {cat:'Bevande',liquido:true,nome:'Coca Cola Zero',kcal_100:0,per_pezzo:330,unita_pezzo:'lattina'},
   {cat:'Bevande',liquido:true,nome:'Succo ACE',kcal_100:50,per_pezzo:200,unita_pezzo:'bicchiere'},
   {cat:'Bevande',liquido:true,nome:'Bevanda proteica (shake)',kcal_100:70,per_pezzo:300,unita_pezzo:'shaker'},
+
+  // ── CONDIMENTI PER LA PASTA ───────────────────────────
+  // Basi e sughi
+  {cat:'Condimento pasta',nome:'Salsa di pomodoro semplice',kcal_100:35,per_pezzo:80,unita_pezzo:'cucchiaio'},
+  {cat:'Condimento pasta',nome:'Passata di pomodoro',kcal_100:25,per_pezzo:80,unita_pezzo:'cucchiaio'},
+  {cat:'Condimento pasta',nome:'Pelati interi in umido',kcal_100:24,per_pezzo:100,unita_pezzo:'cucchiaio'},
+  {cat:'Condimento pasta',nome:'Pomodorini in padella',kcal_100:32,per_pezzo:80,unita_pezzo:'porzione'},
+  {cat:'Condimento pasta',nome:'Salsa all\'amatriciana (sugo)',kcal_100:120,per_pezzo:80,unita_pezzo:'cucchiaio'},
+  {cat:'Condimento pasta',nome:'Salsa alla carbonara (sugo pronto)',kcal_100:195,per_pezzo:80,unita_pezzo:'cucchiaio'},
+  {cat:'Condimento pasta',nome:'Ragu alla bolognese',kcal_100:160,per_pezzo:80,unita_pezzo:'cucchiaio'},
+  {cat:'Condimento pasta',nome:'Ragu di carne misto',kcal_100:148,per_pezzo:80,unita_pezzo:'cucchiaio'},
+  {cat:'Condimento pasta',nome:'Ragu di salsiccia',kcal_100:185,per_pezzo:80,unita_pezzo:'cucchiaio'},
+  {cat:'Condimento pasta',nome:'Ragu di agnello',kcal_100:155,per_pezzo:80,unita_pezzo:'cucchiaio'},
+  {cat:'Condimento pasta',nome:'Sugo alla norma (melanzane)',kcal_100:75,per_pezzo:80,unita_pezzo:'cucchiaio'},
+  {cat:'Condimento pasta',nome:'Sugo alla puttanesca',kcal_100:65,per_pezzo:80,unita_pezzo:'cucchiaio'},
+  {cat:'Condimento pasta',nome:'Sugo alle vongole',kcal_100:85,per_pezzo:80,unita_pezzo:'cucchiaio'},
+  {cat:'Condimento pasta',nome:'Sugo di gamberi e pomodoro',kcal_100:90,per_pezzo:80,unita_pezzo:'cucchiaio'},
+  {cat:'Condimento pasta',nome:'Sugo di calamari',kcal_100:72,per_pezzo:80,unita_pezzo:'cucchiaio'},
+  {cat:'Condimento pasta',nome:'Cacio e pepe (condimento)',kcal_100:220,per_pezzo:50,unita_pezzo:'porzione'},
+  // Pesti e creme
+  {cat:'Condimento pasta',nome:'Pesto alla genovese',kcal_100:454,per_pezzo:30,unita_pezzo:'cucchiaio'},
+  {cat:'Condimento pasta',nome:'Pesto rosso (pomodori secchi)',kcal_100:383,per_pezzo:30,unita_pezzo:'cucchiaio'},
+  {cat:'Condimento pasta',nome:'Pesto di rucola',kcal_100:380,per_pezzo:30,unita_pezzo:'cucchiaio'},
+  {cat:'Condimento pasta',nome:'Pesto di pistacchio',kcal_100:480,per_pezzo:30,unita_pezzo:'cucchiaio'},
+  {cat:'Condimento pasta',nome:'Pesto di zucchine',kcal_100:195,per_pezzo:30,unita_pezzo:'cucchiaio'},
+  {cat:'Condimento pasta',nome:'Crema di zucca',kcal_100:55,per_pezzo:80,unita_pezzo:'cucchiaio'},
+  {cat:'Condimento pasta',nome:'Crema di funghi porcini',kcal_100:85,per_pezzo:60,unita_pezzo:'cucchiaio'},
+  {cat:'Condimento pasta',nome:'Crema di peperoni arrostiti',kcal_100:70,per_pezzo:60,unita_pezzo:'cucchiaio'},
+  {cat:'Condimento pasta',nome:'Crema di ricotta e limone',kcal_100:145,per_pezzo:50,unita_pezzo:'cucchiaio'},
+  {cat:'Condimento pasta',nome:'Crema di avocado e lime',kcal_100:160,per_pezzo:50,unita_pezzo:'cucchiaio'},
+  {cat:'Condimento pasta',nome:'Salsa al gorgonzola',kcal_100:220,per_pezzo:50,unita_pezzo:'cucchiaio'},
+  {cat:'Condimento pasta',nome:'Salsa ai quattro formaggi',kcal_100:280,per_pezzo:60,unita_pezzo:'cucchiaio'},
+  // Condimenti semplici
+  {cat:'Condimento pasta',nome:'Burro',kcal_100:717,per_pezzo:10,unita_pezzo:'cucchiaio'},
+  {cat:'Condimento pasta',nome:'Burro e salvia',kcal_100:700,per_pezzo:10,unita_pezzo:'cucchiaio'},
+  {cat:'Condimento pasta',nome:'Olio extravergine di oliva',kcal_100:884,per_pezzo:10,unita_pezzo:'cucchiaio'},
+  {cat:'Condimento pasta',nome:'Olio, aglio e peperoncino',kcal_100:420,per_pezzo:20,unita_pezzo:'cucchiaio'},
+  {cat:'Condimento pasta',nome:'Panna fresca',kcal_100:340,per_pezzo:30,unita_pezzo:'cucchiaio'},
+  {cat:'Condimento pasta',nome:'Panna e prosciutto cotto',kcal_100:210,per_pezzo:60,unita_pezzo:'porzione'},
+  {cat:'Condimento pasta',nome:'Panna e salmone affumicato',kcal_100:195,per_pezzo:60,unita_pezzo:'porzione'},
+  // Formaggi da grattare
+  {cat:'Condimento pasta',nome:'Parmigiano reggiano grattugiato',kcal_100:431,per_pezzo:10,unita_pezzo:'cucchiaio'},
+  {cat:'Condimento pasta',nome:'Pecorino romano grattugiato',kcal_100:419,per_pezzo:10,unita_pezzo:'cucchiaio'},
+  {cat:'Condimento pasta',nome:'Grana padano grattugiato',kcal_100:384,per_pezzo:10,unita_pezzo:'cucchiaio'},
+  {cat:'Condimento pasta',nome:'Ricotta fresca',kcal_100:146,per_pezzo:50,unita_pezzo:'cucchiaio'},
+  {cat:'Condimento pasta',nome:'Mascarpone',kcal_100:453,per_pezzo:30,unita_pezzo:'cucchiaio'},
+  // Proteine e aggiunte
+  {cat:'Condimento pasta',nome:'Guanciale',kcal_100:655,per_pezzo:30,unita_pezzo:'porzione'},
+  {cat:'Condimento pasta',nome:'Pancetta tesa',kcal_100:460,per_pezzo:30,unita_pezzo:'porzione'},
+  {cat:'Condimento pasta',nome:'Pancetta affumicata',kcal_100:449,per_pezzo:30,unita_pezzo:'porzione'},
+  {cat:'Condimento pasta',nome:'Speck a cubetti',kcal_100:380,per_pezzo:30,unita_pezzo:'porzione'},
+  {cat:'Condimento pasta',nome:'Prosciutto crudo',kcal_100:268,per_pezzo:30,unita_pezzo:'fetta'},
+  {cat:'Condimento pasta',nome:'Prosciutto cotto a cubetti',kcal_100:181,per_pezzo:30,unita_pezzo:'porzione'},
+  {cat:'Condimento pasta',nome:'Salsiccia sbriciolata',kcal_100:339,per_pezzo:50,unita_pezzo:'porzione'},
+  {cat:'Condimento pasta',nome:'Acciughe sott\'olio',kcal_100:210,per_pezzo:10,unita_pezzo:'filetto'},
+  {cat:'Condimento pasta',nome:'Tonno sott\'olio',kcal_100:200,per_pezzo:50,unita_pezzo:'porzione'},
+  {cat:'Condimento pasta',nome:'Tonno al naturale',kcal_100:116,per_pezzo:50,unita_pezzo:'porzione'},
+  {cat:'Condimento pasta',nome:'Capperi dissalati',kcal_100:24,per_pezzo:10,unita_pezzo:'cucchiaino'},
+  {cat:'Condimento pasta',nome:'Olive nere denocciolate',kcal_100:145,per_pezzo:10,unita_pezzo:'oliva'},
+  {cat:'Condimento pasta',nome:'Olive verdi denocciolate',kcal_100:130,per_pezzo:10,unita_pezzo:'oliva'},
+  {cat:'Condimento pasta',nome:'Pomodori secchi sott\'olio',kcal_100:257,per_pezzo:15,unita_pezzo:'pomodoro'},
+  {cat:'Condimento pasta',nome:'Funghi trifolati',kcal_100:45,per_pezzo:60,unita_pezzo:'porzione'},
+  {cat:'Condimento pasta',nome:'Funghi porcini in umido',kcal_100:48,per_pezzo:60,unita_pezzo:'porzione'},
+  {cat:'Condimento pasta',nome:'Melanzane a cubetti in padella',kcal_100:35,per_pezzo:80,unita_pezzo:'porzione'},
+  {cat:'Condimento pasta',nome:'Zucchine trifolate',kcal_100:28,per_pezzo:80,unita_pezzo:'porzione'},
+  {cat:'Condimento pasta',nome:'Spinaci saltati in padella',kcal_100:30,per_pezzo:80,unita_pezzo:'porzione'},
+  {cat:'Condimento pasta',nome:'Broccoli ripassati in padella',kcal_100:35,per_pezzo:80,unita_pezzo:'porzione'},
+  {cat:'Condimento pasta',nome:'Ceci in padella',kcal_100:115,per_pezzo:80,unita_pezzo:'porzione'},
+  {cat:'Condimento pasta',nome:'Lenticchie',kcal_100:116,per_pezzo:80,unita_pezzo:'porzione'},
+  {cat:'Condimento pasta',nome:'Noce moscata (spolverata)',kcal_100:525,per_pezzo:0.5,unita_pezzo:'pizzico'},
+  {cat:'Condimento pasta',nome:'Pepe nero',kcal_100:251,per_pezzo:1,unita_pezzo:'pizzico'},
+  {cat:'Condimento pasta',nome:'Peperoncino secco',kcal_100:318,per_pezzo:1,unita_pezzo:'pizzico'},
+  {cat:'Condimento pasta',nome:'Aglio fresco',kcal_100:149,per_pezzo:5,unita_pezzo:'spicchio'},
+
 
   // ── FRUTTA FRESCA ESPANSA ─────────────────────────────
   {cat:'Frutta',nome:'Mela verde (Granny Smith)',kcal_100:58,per_pezzo:170,unita_pezzo:'mela'},
@@ -2231,6 +2473,18 @@ function selezionaAlimento(pasto, nome, kcal100, per_pezzo, unita_pezzo) {
     selectedFood[pasto].unita = 'g';
   }
   aggiornaPreviewKcal(pasto);
+
+  // Se è pasta, mostra il box condimento
+  const dbEntry = DB_ALIMENTI.find(a => a.nome === nome);
+  const isPasta = dbEntry?.cat === 'Pasta italiana' ||
+    ['spaghetti','penne','rigatoni','fusilli','farfalle','linguine','tagliatelle','pappardelle',
+     'bucatini','orecchiette','trofie','gnocchi','lasagne','pasta','vermicelli','maccheroni',
+     'tortellini','tortelloni','ravioli','bigoli','pici','conchiglie','paccheri'].some(p => nome.toLowerCase().includes(p));
+  if (isPasta) {
+    mostraBoxCondimento(pasto);
+  } else {
+    nascondiBoxCondimento(pasto);
+  }
 }
 
 async function aggiungiAlimento(pasto) {
@@ -2350,8 +2604,23 @@ async function caricaPasti() {
 }
 
 document.addEventListener('click', e => {
-  document.querySelectorAll('.food-suggestions').forEach(s => { if (!s.contains(e.target)) s.style.display = 'none'; });
+  document.querySelectorAll('.food-suggestions').forEach(s => {
+    if (!s.contains(e.target) && !e.target.classList.contains('food-search-inp')) s.style.display = 'none';
+  });
+  document.querySelectorAll('.condimento-sugg').forEach(s => {
+    if (!s.contains(e.target) && !e.target.classList.contains('condimento-inp')) s.style.display = 'none';
+  });
 });
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    document.querySelectorAll('.food-suggestions').forEach(s => s.style.display = 'none');
+  }
+});
+
+window.addEventListener('scroll', () => {
+  document.querySelectorAll('.food-suggestions').forEach(s => { if (s.style.display !== 'none') s.style.display = 'none'; });
+}, { passive: true });
 
 // ===================== ACQUA =====================
 let bicchieri = 0;
@@ -2901,6 +3170,108 @@ function toggleSt(uid) {
   const open = body.classList.toggle('open');
   header?.classList.toggle('open', open);
 }
+
+// ===================== CONDIMENTO PASTA =====================
+const CATEGORIE_PASTA = ['Pasta italiana', 'Piatti italiani'];
+let selectedCondimento = {}; // {pasto: {nome, kcal_100, per_pezzo, unita_pezzo}}
+
+function mostraBoxCondimento(pasto) {
+  const wrap = document.getElementById('condwrap-' + pasto);
+  if (wrap) {
+    wrap.style.display = 'block';
+    setTimeout(() => document.getElementById('cond-search-' + pasto)?.focus(), 100);
+  }
+}
+
+function nascondiBoxCondimento(pasto) {
+  const wrap = document.getElementById('condwrap-' + pasto);
+  if (wrap) wrap.style.display = 'none';
+  selectedCondimento[pasto] = null;
+  const inp = document.getElementById('cond-search-' + pasto);
+  if (inp) inp.value = '';
+  const sugg = document.getElementById('cond-sugg-' + pasto);
+  if (sugg) { sugg.style.display = 'none'; sugg.innerHTML = ''; }
+}
+
+function saltaCondimento(pasto) {
+  nascondiBoxCondimento(pasto);
+}
+
+function cercaCondimento(pasto) {
+  const query = document.getElementById('cond-search-' + pasto)?.value.trim().toLowerCase();
+  const sugg = document.getElementById('cond-sugg-' + pasto);
+  if (!sugg) return;
+  if (!query || query.length < 2) { sugg.style.display = 'none'; return; }
+
+  // Cerca in condimento pasta prima, poi tutto il DB
+  const risultati = DB_ALIMENTI.filter(a =>
+    a.nome.toLowerCase().includes(query) &&
+    (a.cat === 'Condimento pasta' || a.cat === 'Condimenti' || a.cat === 'Latticini' || a.cat === 'Carne')
+  ).slice(0, 8);
+
+  if (!risultati.length) { sugg.style.display = 'none'; return; }
+
+  sugg.innerHTML = risultati.map(r => {
+    const nomeSafe = r.nome.replace(/'/g,"\\'").replace(/"/g,'&quot;');
+    const pp = r.per_pezzo || 0;
+    const up = (r.unita_pezzo || 'g').replace(/'/g,"\\'");
+    const emoji = iconaEmoji(r.nome, r.cat);
+    return `<div class="food-suggestion-item" onclick="selezionaCondimento('${pasto}','${nomeSafe}',${r.kcal_100},${pp},'${up}')">
+      <span class="fs-icon">${emoji}</span>
+      <div class="fs-main"><span class="fs-name">${r.nome}</span></div>
+      <span class="fs-kcal">${r.kcal_100} kcal/100g</span>
+    </div>`;
+  }).join('');
+  sugg.style.display = 'block';
+}
+
+function selezionaCondimento(pasto, nome, kcal100, per_pezzo, unita_pezzo) {
+  selectedCondimento[pasto] = { nome, kcal_100: kcal100, per_pezzo: per_pezzo || null, unita_pezzo: unita_pezzo || null };
+  const inp = document.getElementById('cond-search-' + pasto);
+  if (inp) inp.value = nome;
+  const sugg = document.getElementById('cond-sugg-' + pasto);
+  if (sugg) sugg.style.display = 'none';
+  // Set qty default
+  const qty = document.getElementById('cond-qty-' + pasto);
+  if (qty && per_pezzo) qty.value = per_pezzo;
+  else if (qty) qty.value = 30;
+  // Update unit label
+  const unitEl = qty?.nextElementSibling;
+  if (unitEl) unitEl.textContent = unita_pezzo || 'g';
+}
+
+async function aggiungiCondimento(pasto) {
+  const cond = selectedCondimento[pasto];
+  if (!cond) return;
+  const qty = parseFloat(document.getElementById('cond-qty-' + pasto)?.value) || 30;
+  const kcalTotali = Math.round((cond.kcal_100 * qty) / 100);
+  const displayLabel = qty + (cond.unita_pezzo || 'g');
+
+  const record = await sb('POST', 'alimenti', {
+    data: todayKey, pasto, nome: cond.nome,
+    quantita: qty, kcal_100: cond.kcal_100, kcal_totali: kcalTotali
+  });
+
+  const item = Array.isArray(record) ? record[0] : record;
+  const entry = item && item.id
+    ? { ...item, display_label: displayLabel }
+    : { id: (Date.now()+1).toString(), nome: cond.nome, quantita: qty, unita: 'g', kcal_100: cond.kcal_100, kcal_totali: kcalTotali, display_label: displayLabel };
+
+  if (!alimentiPerPasto[pasto]) alimentiPerPasto[pasto] = [];
+  alimentiPerPasto[pasto].push(entry);
+  nascondiBoxCondimento(pasto);
+  renderAlimentiPasto(pasto);
+  aggiornaMetaPasto(pasto);
+  aggiornaStats();
+  setTimeout(() => generaAnalisi(), 400);
+}
+
+// Chiudi condimento sugg click fuori
+document.addEventListener('click', e => {
+  document.querySelectorAll('.condimento-sugg').forEach(s => {
+    if (!s.contains(e.target) && !e.target.classList.contains('condimento-inp')) s.style.display = 'none';
+  });
+});
 
 init();
 </script>
